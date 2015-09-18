@@ -18,7 +18,7 @@ let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
 let UNIFORM_NORMAL_MATRIX = 1
 var uniforms = [GLint](count: 2, repeatedValue: 0)
 
-class GameViewController: GLKViewController {
+class GameViewController: SwiftGLKViewController {
     
     var program: GLuint = 0
     
@@ -77,22 +77,22 @@ class GameViewController: GLKViewController {
         self.loadShaders()
         
         self.effect = GLKBaseEffect()
-        self.effect!.light0.enabled = GLboolean(GL_TRUE)
+        self.effect!.light0.enabled = GL.TRUE
         self.effect!.light0.diffuseColor = GLKVector4Make(1.0, 0.4, 0.4, 1.0)
         
-        glEnable(GLenum(GL_DEPTH_TEST))
+        glEnable(GL.DEPTH_TEST)
         
         glGenVertexArraysOES(1, &vertexArray)
         glBindVertexArrayOES(vertexArray)
         
         glGenBuffers(1, &vertexBuffer)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(sizeof(GLfloat) * gCubeVertexData.count), &gCubeVertexData, GLenum(GL_STATIC_DRAW))
+        glBindBuffer(GL.ARRAY_BUFFER, vertexBuffer)
+        glBufferData(GL.ARRAY_BUFFER, GLsizeiptr(sizeof(GLfloat) * gCubeVertexData.count), &gCubeVertexData, GL.STATIC_DRAW)
         
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(0))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(0))
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 24, BUFFER_OFFSET(12))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(12))
         
         glBindVertexArrayOES(0);
     }
@@ -143,14 +143,14 @@ class GameViewController: GLKViewController {
     
     override func glkView(view: GLKView, drawInRect rect: CGRect) {
         glClearColor(0.65, 0.65, 0.65, 1.0)
-        glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
+        glClear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT)
         
         glBindVertexArrayOES(vertexArray)
         
         // Render the object with GLKit
         self.effect?.prepareToDraw()
         
-        glDrawArrays(GLenum(GL_TRIANGLES) , 0, 36)
+        glDrawArrays(GL.TRIANGLES , 0, 36)
         
         // Render the object again with ES2
         glUseProgram(program)
@@ -163,7 +163,7 @@ class GameViewController: GLKViewController {
             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, UnsafePointer($0));
         })
         
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, 36)
+        glDrawArrays(GL.TRIANGLES, 0, 36)
     }
     
     // MARK: -  OpenGL ES 2 shader compilation
@@ -179,14 +179,14 @@ class GameViewController: GLKViewController {
         
         // Create and compile vertex shader.
         vertShaderPathname = NSBundle.mainBundle().pathForResource("Shader", ofType: "vsh")!
-        if self.compileShader(&vertShader, type: GLenum(GL_VERTEX_SHADER), file: vertShaderPathname) == false {
+        if self.compileShader(&vertShader, type: GL.VERTEX_SHADER, file: vertShaderPathname) == false {
             print("Failed to compile vertex shader")
             return false
         }
         
         // Create and compile fragment shader.
         fragShaderPathname = NSBundle.mainBundle().pathForResource("Shader", ofType: "fsh")!
-        if !self.compileShader(&fragShader, type: GLenum(GL_FRAGMENT_SHADER), file: fragShaderPathname) {
+        if !self.compileShader(&fragShader, type: GL.FRAGMENT_SHADER, file: fragShaderPathname) {
             print("Failed to compile fragment shader");
             return false
         }
@@ -199,8 +199,8 @@ class GameViewController: GLKViewController {
         
         // Bind attribute locations.
         // This needs to be done prior to linking.
-        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Position.rawValue), "position")
-        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Normal.rawValue), "normal")
+        glBindAttribLocation(program, GL.VertexAttrib.Position, "position")
+        glBindAttribLocation(program, GL.VertexAttrib.Normal, "normal")
         
         // Link program.
         if !self.linkProgram(program) {
@@ -266,7 +266,7 @@ class GameViewController: GLKViewController {
         //        }
         //#endif
         
-        glGetShaderiv(shader, GLenum(GL_COMPILE_STATUS), &status)
+        glGetShaderiv(shader, GL.COMPILE_STATUS, &status)
         if status == 0 {
             glDeleteShader(shader);
             return false
@@ -289,7 +289,7 @@ class GameViewController: GLKViewController {
         //        }
         //#endif
         
-        glGetProgramiv(prog, GLenum(GL_LINK_STATUS), &status)
+        glGetProgramiv(prog, GL.LINK_STATUS, &status)
         if status == 0 {
             return false
         }
@@ -302,14 +302,14 @@ class GameViewController: GLKViewController {
         var status: GLint = 0
         
         glValidateProgram(prog)
-        glGetProgramiv(prog, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+        glGetProgramiv(prog, GL.INFO_LOG_LENGTH, &logLength)
         if logLength > 0 {
             var log: [GLchar] = [GLchar](count: Int(logLength), repeatedValue: 0)
             glGetProgramInfoLog(prog, logLength, &logLength, &log)
             print("Program validate log: \n\(log)")
         }
         
-        glGetProgramiv(prog, GLenum(GL_VALIDATE_STATUS), &status)
+        glGetProgramiv(prog, GL.VALIDATE_STATUS, &status)
         var returnVal = true
         if status == 0 {
             returnVal = false

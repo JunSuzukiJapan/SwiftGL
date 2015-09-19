@@ -45,7 +45,7 @@ class GameViewController: GLKViewController {
         
         self.context = EAGLContext(API: .OpenGLES2)
         
-        if !(self.context != nil) {
+        if self.context == nil {
             print("Failed to create ES context")
         }
         

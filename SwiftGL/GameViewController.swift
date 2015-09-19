@@ -18,7 +18,7 @@ let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
 let UNIFORM_NORMAL_MATRIX = 1
 var uniforms = [GLint](count: 2, repeatedValue: 0)
 
-class GameViewController: SwiftGLKViewController {
+class GameViewController: GLKViewController {
     
     var program: GLuint = 0
     
@@ -89,10 +89,10 @@ class GameViewController: SwiftGLKViewController {
         glBindBuffer(GL.ARRAY_BUFFER, vertexBuffer)
         glBufferData(GL.ARRAY_BUFFER, GLsizeiptr(sizeof(GLfloat) * gCubeVertexData.count), &gCubeVertexData, GL.STATIC_DRAW)
         
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(0))
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(12))
+        glEnableVertexAttribArray(GLK.VertexAttrib.Position)
+        glVertexAttribPointer(GLK.VertexAttrib.Position, 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(0))
+        glEnableVertexAttribArray(GLK.VertexAttrib.Normal)
+        glVertexAttribPointer(GLK.VertexAttrib.Normal, 3, GL.FLOAT, GL.FALSE, 24, BUFFER_OFFSET(12))
         
         glBindVertexArrayOES(0);
     }
@@ -199,8 +199,8 @@ class GameViewController: SwiftGLKViewController {
         
         // Bind attribute locations.
         // This needs to be done prior to linking.
-        glBindAttribLocation(program, GL.VertexAttrib.Position, "position")
-        glBindAttribLocation(program, GL.VertexAttrib.Normal, "normal")
+        glBindAttribLocation(program, GLK.VertexAttrib.Position, "position")
+        glBindAttribLocation(program, GLK.VertexAttrib.Normal, "normal")
         
         // Link program.
         if !self.linkProgram(program) {

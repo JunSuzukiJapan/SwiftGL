@@ -1,0 +1,783 @@
+//
+//  SwiftGL.swift
+//  SwiftGL
+//
+//  Created by suzukijun on 2015/09/18.
+//  Copyright © 2015年 Jun SUZUKI. All rights reserved.
+//
+
+import GLKit
+import OpenGLES
+
+extension GLKViewController {
+
+    class GL {
+        /*
+        static let UNIFORM_MODELVIEWPROJECTION_MATRIX = 0
+        static let UNIFORM_NORMAL_MATRIX = 1
+        static let NUM_UNIFORMS = 2
+
+        // type: GLboolean
+        static let TRUE: GLboolean = GLboolean(GL_TRUE)
+        static let FALSE: GLboolean = GLboolean(GL_FALSE)
+
+        // type: GLenum
+        static let FLOAT: GLenum = GLenum(GL_FLOAT)
+        static let TRIANGLES: GLenum = GLenum(GL_TRIANGLES)
+        static let DEPTH_TEST: GLenum = GLenum(GL_DEPTH_TEST)
+        static let ARRAY_BUFFER: GLenum = GLenum(GL_ARRAY_BUFFER)
+        static let STATIC_DRAW: GLenum = GLenum(GL_STATIC_DRAW)
+        static let VERTEX_SHADER: GLenum = GLenum(GL_VERTEX_SHADER)
+        static let FRAGMENT_SHADER: GLenum = GLenum(GL_FRAGMENT_SHADER)
+        static let COMPILE_STATUS: GLenum = GLenum(GL_COMPILE_STATUS)
+        static let LINK_STATUS: GLenum = GLenum(GL_LINK_STATUS)
+        static let INFO_LOG_LENGTH: GLenum = GLenum(GL_INFO_LOG_LENGTH)
+        static let VALIDATE_STATUS: GLenum = GLenum(GL_VALIDATE_STATUS)
+
+        // type: GLbitfield
+        static let COLOR_BUFFER_BIT: GLbitfield = GLbitfield(COLOR_BUFFER_BIT)
+        static let DEPTH_BUFFER_BIT: GLbitfield = GLbitfield(DEPTH_BUFFER_BIT)
+        */
+
+        /* OpenGL ES core versions */
+        static let ES_VERSION_3_0: GLenum = GLenum(GL_ES_VERSION_3_0)
+        static let ES_VERSION_2_0: GLenum = GLenum(GL_ES_VERSION_2_0)
+
+        /* OpenGL ES 2.0 */
+
+        /* ClearBufferMask */
+        static let DEPTH_BUFFER_BIT: GLbitfield = GLbitfield(GL_DEPTH_BUFFER_BIT)
+        static let STENCIL_BUFFER_BIT: GLbitfield = GLbitfield(GL_STENCIL_BUFFER_BIT)
+        static let COLOR_BUFFER_BIT: GLbitfield = GLbitfield(GL_COLOR_BUFFER_BIT)
+
+        /* Boolean */
+        static let FALSE: GLboolean = GLboolean(GL_FALSE)
+        static let TRUE: GLboolean = GLboolean(GL_TRUE)
+
+        /* BeginMode */
+        static let POINTS: GLenum = GLenum(GL_POINTS)
+        static let LINES: GLenum = GLenum(GL_LINES)
+        static let LINE_LOOP: GLenum = GLenum(GL_LINE_LOOP)
+        static let LINE_STRIP: GLenum = GLenum(GL_LINE_STRIP)
+        static let TRIANGLES: GLenum = GLenum(GL_TRIANGLES)
+        static let TRIANGLE_STRIP: GLenum = GLenum(GL_TRIANGLE_STRIP)
+        static let TRIANGLE_FAN: GLenum = GLenum(GL_TRIANGLE_FAN)
+
+        /* BlendingFactorDest */
+        static let ZERO: GLenum = GLenum(GL_ZERO)
+        static let ONE: GLenum = GLenum(GL_ONE)
+        static let SRC_COLOR: GLenum = GLenum(GL_SRC_COLOR)
+        static let ONE_MINUS_SRC_COLOR: GLenum = GLenum(GL_ONE_MINUS_SRC_COLOR)
+        static let SRC_ALPHA: GLenum = GLenum(GL_SRC_ALPHA)
+        static let ONE_MINUS_SRC_ALPHA: GLenum = GLenum(GL_ONE_MINUS_SRC_ALPHA)
+        static let DST_ALPHA: GLenum = GLenum(GL_DST_ALPHA)
+        static let ONE_MINUS_DST_ALPHA: GLenum = GLenum(GL_ONE_MINUS_DST_ALPHA)
+
+        /* BlendingFactorSrc */
+        /*      ZERO */
+        /*      ONE */
+        static let DST_COLOR: GLenum = GLenum(GL_DST_COLOR)
+        static let ONE_MINUS_DST_COLOR: GLenum = GLenum(GL_ONE_MINUS_DST_COLOR)
+        static let SRC_ALPHA_SATURATE: GLenum = GLenum(GL_SRC_ALPHA_SATURATE)
+        /*      SRC_ALPHA */
+        /*      ONE_MINUS_SRC_ALPHA */
+        /*      DST_ALPHA */
+        /*      ONE_MINUS_DST_ALPHA */
+
+        /* BlendEquationSeparate */
+        static let FUNC_ADD: GLenum = GLenum(GL_FUNC_ADD)
+        static let BLEND_EQUATION: GLenum = GLenum(GL_BLEND_EQUATION)
+        static let BLEND_EQUATION_RGB: GLenum = GLenum(GL_BLEND_EQUATION_RGB)
+        static let BLEND_EQUATION_ALPHA: GLenum = GLenum(GL_BLEND_EQUATION_ALPHA)
+
+        /* BlendSubtract */
+        static let FUNC_SUBTRACT: GLenum = GLenum(GL_FUNC_SUBTRACT)
+        static let FUNC_REVERSE_SUBTRACT: GLenum = GLenum(GL_FUNC_REVERSE_SUBTRACT)
+        /* Separate Blend Functions */
+        static let BLEND_DST_RGB: GLenum = GLenum(GL_BLEND_DST_RGB)
+        static let BLEND_SRC_RGB: GLenum = GLenum(GL_BLEND_SRC_RGB)
+        static let BLEND_DST_ALPHA: GLenum = GLenum(GL_BLEND_DST_ALPHA)
+        static let BLEND_SRC_ALPHA: GLenum = GLenum(GL_BLEND_SRC_ALPHA)
+        static let CONSTANT_COLOR: GLenum = GLenum(GL_CONSTANT_COLOR)
+        static let ONE_MINUS_CONSTANT_COLOR: GLenum = GLenum(GL_ONE_MINUS_CONSTANT_COLOR)
+        static let CONSTANT_ALPHA: GLenum = GLenum(GL_CONSTANT_ALPHA)
+        static let ONE_MINUS_CONSTANT_ALPHA: GLenum = GLenum(GL_ONE_MINUS_CONSTANT_ALPHA)
+        static let BLEND_COLOR: GLenum = GLenum(GL_BLEND_COLOR)
+
+        /* Buffer Objects */
+        static let ARRAY_BUFFER: GLenum = GLenum(GL_ARRAY_BUFFER)
+        static let ELEMENT_ARRAY_BUFFER: GLenum = GLenum(GL_ELEMENT_ARRAY_BUFFER)
+        static let ARRAY_BUFFER_BINDING: GLenum = GLenum(GL_ARRAY_BUFFER_BINDING)
+        static let ELEMENT_ARRAY_BUFFER_BINDING: GLenum = GLenum(GL_ELEMENT_ARRAY_BUFFER_BINDING)
+
+        static let STREAM_DRAW: GLenum = GLenum(GL_STREAM_DRAW)
+        static let STATIC_DRAW: GLenum = GLenum(GL_STATIC_DRAW)
+        static let DYNAMIC_DRAW: GLenum = GLenum(GL_DYNAMIC_DRAW)
+
+        static let BUFFER_SIZE: GLenum = GLenum(GL_BUFFER_SIZE)
+        static let BUFFER_USAGE: GLenum = GLenum(GL_BUFFER_USAGE)
+
+        static let CURRENT_VERTEX_ATTRIB: GLenum = GLenum(GL_CURRENT_VERTEX_ATTRIB)
+
+        /* CullFaceMode */
+        static let FRONT: GLenum = GLenum(GL_FRONT)
+        static let BACK: GLenum = GLenum(GL_BACK)
+        static let FRONT_AND_BACK: GLenum = GLenum(GL_FRONT_AND_BACK)
+
+        /* DepthFunction */
+        /*      NEVER */
+        /*      LESS */
+        /*      EQUAL */
+        /*      LEQUAL */
+        /*      GREATER */
+        /*      NOTEQUAL */
+        /*      GEQUAL */
+        /*      ALWAYS */
+
+        /* EnableCap */
+        static let TEXTURE_2D: GLenum = GLenum(GL_TEXTURE_2D)
+        static let CULL_FACE: GLenum = GLenum(GL_CULL_FACE)
+        static let BLEND: GLenum = GLenum(GL_BLEND)
+        static let DITHER: GLenum = GLenum(GL_DITHER)
+        static let STENCIL_TEST: GLenum = GLenum(GL_STENCIL_TEST)
+        static let DEPTH_TEST: GLenum = GLenum(GL_DEPTH_TEST)
+        static let SCISSOR_TEST: GLenum = GLenum(GL_SCISSOR_TEST)
+        static let POLYGON_OFFSET_FILL: GLenum = GLenum(GL_POLYGON_OFFSET_FILL)
+        static let SAMPLE_ALPHA_TO_COVERAGE: GLenum = GLenum(GL_SAMPLE_ALPHA_TO_COVERAGE)
+        static let SAMPLE_COVERAGE: GLenum = GLenum(GL_SAMPLE_COVERAGE)
+
+        /* ErrorCode */
+        static let NO_ERROR: GLenum = GLenum(GL_NO_ERROR)
+        static let INVALID_ENUM: GLenum = GLenum(GL_INVALID_ENUM)
+        static let INVALID_VALUE: GLenum = GLenum(GL_INVALID_VALUE)
+        static let INVALID_OPERATION: GLenum = GLenum(GL_INVALID_OPERATION)
+        static let OUT_OF_MEMORY: GLenum = GLenum(GL_OUT_OF_MEMORY)
+
+        /* FrontFaceDirection */
+        static let CW: GLenum = GLenum(GL_CW)
+        static let CCW: GLenum = GLenum(GL_CCW)
+
+        /* GetPName */
+        static let LINE_WIDTH: GLenum = GLenum(GL_LINE_WIDTH)
+        static let ALIASED_POINT_SIZE_RANGE: GLenum = GLenum(GL_ALIASED_POINT_SIZE_RANGE)
+        static let ALIASED_LINE_WIDTH_RANGE: GLenum = GLenum(GL_ALIASED_LINE_WIDTH_RANGE)
+        static let CULL_FACE_MODE: GLenum = GLenum(GL_CULL_FACE_MODE)
+        static let FRONT_FACE: GLenum = GLenum(GL_FRONT_FACE)
+        static let DEPTH_RANGE: GLenum = GLenum(GL_DEPTH_RANGE)
+        static let DEPTH_WRITEMASK: GLenum = GLenum(GL_DEPTH_WRITEMASK)
+        static let DEPTH_CLEAR_VALUE: GLenum = GLenum(GL_DEPTH_CLEAR_VALUE)
+        static let DEPTH_FUNC: GLenum = GLenum(GL_DEPTH_FUNC)
+        static let STENCIL_CLEAR_VALUE: GLenum = GLenum(GL_STENCIL_CLEAR_VALUE)
+        static let STENCIL_FUNC: GLenum = GLenum(GL_STENCIL_FUNC)
+        static let STENCIL_FAIL: GLenum = GLenum(GL_STENCIL_FAIL)
+        static let STENCIL_PASS_DEPTH_FAIL: GLenum = GLenum(GL_STENCIL_PASS_DEPTH_FAIL)
+        static let STENCIL_PASS_DEPTH_PASS: GLenum = GLenum(GL_STENCIL_PASS_DEPTH_PASS)
+        static let STENCIL_REF: GLenum = GLenum(GL_STENCIL_REF)
+        static let STENCIL_VALUE_MASK: GLenum = GLenum(GL_STENCIL_VALUE_MASK)
+        static let STENCIL_WRITEMASK: GLenum = GLenum(GL_STENCIL_WRITEMASK)
+        static let STENCIL_BACK_FUNC: GLenum = GLenum(GL_STENCIL_BACK_FUNC)
+        static let STENCIL_BACK_FAIL: GLenum = GLenum(GL_STENCIL_BACK_FAIL)
+        static let STENCIL_BACK_PASS_DEPTH_FAIL: GLenum = GLenum(GL_STENCIL_BACK_PASS_DEPTH_FAIL)
+        static let STENCIL_BACK_PASS_DEPTH_PASS: GLenum = GLenum(GL_STENCIL_BACK_PASS_DEPTH_PASS)
+        static let STENCIL_BACK_REF: GLenum = GLenum(GL_STENCIL_BACK_REF)
+        static let STENCIL_BACK_VALUE_MASK: GLenum = GLenum(GL_STENCIL_BACK_VALUE_MASK)
+        static let STENCIL_BACK_WRITEMASK: GLenum = GLenum(GL_STENCIL_BACK_WRITEMASK)
+        static let VIEWPORT: GLenum = GLenum(GL_VIEWPORT)
+        static let SCISSOR_BOX: GLenum = GLenum(GL_SCISSOR_BOX)
+        /*      SCISSOR_TEST */
+        static let COLOR_CLEAR_VALUE: GLenum = GLenum(GL_COLOR_CLEAR_VALUE)
+        static let COLOR_WRITEMASK: GLenum = GLenum(GL_COLOR_WRITEMASK)
+        static let UNPACK_ALIGNMENT: GLenum = GLenum(GL_UNPACK_ALIGNMENT)
+        static let PACK_ALIGNMENT: GLenum = GLenum(GL_PACK_ALIGNMENT)
+        static let MAX_TEXTURE_SIZE: GLenum = GLenum(GL_MAX_TEXTURE_SIZE)
+        static let MAX_VIEWPORT_DIMS: GLenum = GLenum(GL_MAX_VIEWPORT_DIMS)
+        static let SUBPIXEL_BITS: GLenum = GLenum(GL_SUBPIXEL_BITS)
+        static let RED_BITS: GLenum = GLenum(GL_RED_BITS)
+        static let GREEN_BITS: GLenum = GLenum(GL_GREEN_BITS)
+        static let BLUE_BITS: GLenum = GLenum(GL_BLUE_BITS)
+        static let ALPHA_BITS: GLenum = GLenum(GL_ALPHA_BITS)
+        static let DEPTH_BITS: GLenum = GLenum(GL_DEPTH_BITS)
+        static let STENCIL_BITS: GLenum = GLenum(GL_STENCIL_BITS)
+        static let POLYGON_OFFSET_UNITS: GLenum = GLenum(GL_POLYGON_OFFSET_UNITS)
+        /*      POLYGON_OFFSET_FILL */
+        static let POLYGON_OFFSET_FACTOR: GLenum = GLenum(GL_POLYGON_OFFSET_FACTOR)
+        static let TEXTURE_BINDING_2D: GLenum = GLenum(GL_TEXTURE_BINDING_2D)
+        static let SAMPLE_BUFFERS: GLenum = GLenum(GL_SAMPLE_BUFFERS)
+        static let SAMPLES: GLenum = GLenum(GL_SAMPLES)
+        static let SAMPLE_COVERAGE_VALUE: GLenum = GLenum(GL_SAMPLE_COVERAGE_VALUE)
+        static let SAMPLE_COVERAGE_INVERT: GLenum = GLenum(GL_SAMPLE_COVERAGE_INVERT)
+
+        /* GetTextureParameter */
+        /*      TEXTURE_MAG_FILTER */
+        /*      TEXTURE_MIN_FILTER */
+        /*      TEXTURE_WRAP_S */
+        /*      TEXTURE_WRAP_T */
+
+        static let NUM_COMPRESSED_TEXTURE_FORMATS: GLenum = GLenum(GL_NUM_COMPRESSED_TEXTURE_FORMATS)
+        static let COMPRESSED_TEXTURE_FORMATS: GLenum = GLenum(GL_COMPRESSED_TEXTURE_FORMATS)
+
+        /* HintMode */
+        static let DONT_CARE: GLenum = GLenum(GL_DONT_CARE)
+        static let FASTEST: GLenum = GLenum(GL_FASTEST)
+        static let NICEST: GLenum = GLenum(GL_NICEST)
+
+        /* HintTarget */
+        static let GENERATE_MIPMAP_HINT: GLenum = GLenum(GL_GENERATE_MIPMAP_HINT)
+
+        /* DataType */
+        static let BYTE: GLenum = GLenum(GL_BYTE)
+        static let UNSIGNED_BYTE: GLenum = GLenum(GL_UNSIGNED_BYTE)
+        static let SHORT: GLenum = GLenum(GL_SHORT)
+        static let UNSIGNED_SHORT: GLenum = GLenum(GL_UNSIGNED_SHORT)
+        static let INT: GLenum = GLenum(GL_INT)
+        static let UNSIGNED_INT: GLenum = GLenum(GL_UNSIGNED_INT)
+        static let FLOAT: GLenum = GLenum(GL_FLOAT)
+        static let FIXED: GLenum = GLenum(GL_FIXED)
+
+        /* PixelFormat */
+        static let DEPTH_COMPONENT: GLenum = GLenum(GL_DEPTH_COMPONENT)
+        static let ALPHA: GLenum = GLenum(GL_ALPHA)
+        static let RGB: GLenum = GLenum(GL_RGB)
+        static let RGBA: GLenum = GLenum(GL_RGBA)
+        static let LUMINANCE: GLenum = GLenum(GL_LUMINANCE)
+        static let LUMINANCE_ALPHA: GLenum = GLenum(GL_LUMINANCE_ALPHA)
+
+        /* PixelType */
+        /*      UNSIGNED_BYTE */
+        static let UNSIGNED_SHORT_4_4_4_4: GLenum = GLenum(GL_UNSIGNED_SHORT_4_4_4_4)
+        static let UNSIGNED_SHORT_5_5_5_1: GLenum = GLenum(GL_UNSIGNED_SHORT_5_5_5_1)
+        static let UNSIGNED_SHORT_5_6_5: GLenum = GLenum(GL_UNSIGNED_SHORT_5_6_5)
+
+        /* Shaders */
+        static let FRAGMENT_SHADER: GLenum = GLenum(GL_FRAGMENT_SHADER)
+        static let VERTEX_SHADER: GLenum = GLenum(GL_VERTEX_SHADER)
+        static let MAX_VERTEX_ATTRIBS: GLenum = GLenum(GL_MAX_VERTEX_ATTRIBS)
+        static let MAX_VERTEX_UNIFORM_VECTORS: GLenum = GLenum(GL_MAX_VERTEX_UNIFORM_VECTORS)
+        static let MAX_VARYING_VECTORS: GLenum = GLenum(GL_MAX_VARYING_VECTORS)
+        static let MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum = GLenum(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS)
+        static let MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum = GLenum(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS)
+        static let MAX_TEXTURE_IMAGE_UNITS: GLenum = GLenum(GL_MAX_TEXTURE_IMAGE_UNITS)
+        static let MAX_FRAGMENT_UNIFORM_VECTORS: GLenum = GLenum(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
+        static let SHADER_TYPE: GLenum = GLenum(GL_SHADER_TYPE)
+        static let DELETE_STATUS: GLenum = GLenum(GL_DELETE_STATUS)
+        static let LINK_STATUS: GLenum = GLenum(GL_LINK_STATUS)
+        static let VALIDATE_STATUS: GLenum = GLenum(GL_VALIDATE_STATUS)
+        static let ATTACHED_SHADERS: GLenum = GLenum(GL_ATTACHED_SHADERS)
+        static let ACTIVE_UNIFORMS: GLenum = GLenum(GL_ACTIVE_UNIFORMS)
+        static let ACTIVE_UNIFORM_MAX_LENGTH: GLenum = GLenum(GL_ACTIVE_UNIFORM_MAX_LENGTH)
+        static let ACTIVE_ATTRIBUTES: GLenum = GLenum(GL_ACTIVE_ATTRIBUTES)
+        static let ACTIVE_ATTRIBUTE_MAX_LENGTH: GLenum = GLenum(GL_ACTIVE_ATTRIBUTE_MAX_LENGTH)
+        static let SHADING_LANGUAGE_VERSION: GLenum = GLenum(GL_SHADING_LANGUAGE_VERSION)
+        static let CURRENT_PROGRAM: GLenum = GLenum(GL_CURRENT_PROGRAM)
+
+        /* StencilFunction */
+        static let NEVER: GLenum = GLenum(GL_NEVER)
+        static let LESS: GLenum = GLenum(GL_LESS)
+        static let EQUAL: GLenum = GLenum(GL_EQUAL)
+        static let LEQUAL: GLenum = GLenum(GL_LEQUAL)
+        static let GREATER: GLenum = GLenum(GL_GREATER)
+        static let NOTEQUAL: GLenum = GLenum(GL_NOTEQUAL)
+        static let GEQUAL: GLenum = GLenum(GL_GEQUAL)
+        static let ALWAYS: GLenum = GLenum(GL_ALWAYS)
+
+        /* StencilOp */
+        /*      ZERO */
+        static let KEEP: GLenum = GLenum(GL_KEEP)
+        static let REPLACE: GLenum = GLenum(GL_REPLACE)
+        static let INCR: GLenum = GLenum(GL_INCR)
+        static let DECR: GLenum = GLenum(GL_DECR)
+        static let INVERT: GLenum = GLenum(GL_INVERT)
+        static let INCR_WRAP: GLenum = GLenum(GL_INCR_WRAP)
+        static let DECR_WRAP: GLenum = GLenum(GL_DECR_WRAP)
+
+        /* StringName */
+        static let VENDOR: GLenum = GLenum(GL_VENDOR)
+        static let RENDERER: GLenum = GLenum(GL_RENDERER)
+        static let VERSION: GLenum = GLenum(GL_VERSION)
+        static let EXTENSIONS: GLenum = GLenum(GL_EXTENSIONS)
+
+        /* TextureMagFilter */
+        static let NEAREST: GLenum = GLenum(GL_NEAREST)
+        static let LINEAR: GLenum = GLenum(GL_LINEAR)
+
+        /* TextureMinFilter */
+        /*      NEAREST */
+        /*      LINEAR */
+        static let NEAREST_MIPMAP_NEAREST: GLenum = GLenum(GL_NEAREST_MIPMAP_NEAREST)
+        static let LINEAR_MIPMAP_NEAREST: GLenum = GLenum(GL_LINEAR_MIPMAP_NEAREST)
+        static let NEAREST_MIPMAP_LINEAR: GLenum = GLenum(GL_NEAREST_MIPMAP_LINEAR)
+        static let LINEAR_MIPMAP_LINEAR: GLenum = GLenum(GL_LINEAR_MIPMAP_LINEAR)
+
+        /* TextureParameterName */
+        static let TEXTURE_MAG_FILTER: GLenum = GLenum(GL_TEXTURE_MAG_FILTER)
+        static let TEXTURE_MIN_FILTER: GLenum = GLenum(GL_TEXTURE_MIN_FILTER)
+        static let TEXTURE_WRAP_S: GLenum = GLenum(GL_TEXTURE_WRAP_S)
+        static let TEXTURE_WRAP_T: GLenum = GLenum(GL_TEXTURE_WRAP_T)
+
+        /* TextureTarget */
+        /*      TEXTURE_2D */
+        static let TEXTURE: GLenum = GLenum(GL_TEXTURE)
+
+        static let TEXTURE_CUBE_MAP: GLenum = GLenum(GL_TEXTURE_CUBE_MAP)
+        static let TEXTURE_BINDING_CUBE_MAP: GLenum = GLenum(GL_TEXTURE_BINDING_CUBE_MAP)
+        static let TEXTURE_CUBE_MAP_POSITIVE_X: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_POSITIVE_X)
+        static let TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_NEGATIVE_X)
+        static let TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_POSITIVE_Y)
+        static let TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y)
+        static let TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_POSITIVE_Z)
+        static let TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum = GLenum(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z)
+        static let MAX_CUBE_MAP_TEXTURE_SIZE: GLenum = GLenum(GL_MAX_CUBE_MAP_TEXTURE_SIZE)
+
+        /* TextureUnit */
+        static let TEXTURE0: GLenum = GLenum(GL_TEXTURE0)
+        static let TEXTURE1: GLenum = GLenum(GL_TEXTURE1)
+        static let TEXTURE2: GLenum = GLenum(GL_TEXTURE2)
+        static let TEXTURE3: GLenum = GLenum(GL_TEXTURE3)
+        static let TEXTURE4: GLenum = GLenum(GL_TEXTURE4)
+        static let TEXTURE5: GLenum = GLenum(GL_TEXTURE5)
+        static let TEXTURE6: GLenum = GLenum(GL_TEXTURE6)
+        static let TEXTURE7: GLenum = GLenum(GL_TEXTURE7)
+        static let TEXTURE8: GLenum = GLenum(GL_TEXTURE8)
+        static let TEXTURE9: GLenum = GLenum(GL_TEXTURE9)
+        static let TEXTURE10: GLenum = GLenum(GL_TEXTURE10)
+        static let TEXTURE11: GLenum = GLenum(GL_TEXTURE11)
+        static let TEXTURE12: GLenum = GLenum(GL_TEXTURE12)
+        static let TEXTURE13: GLenum = GLenum(GL_TEXTURE13)
+        static let TEXTURE14: GLenum = GLenum(GL_TEXTURE14)
+        static let TEXTURE15: GLenum = GLenum(GL_TEXTURE15)
+        static let TEXTURE16: GLenum = GLenum(GL_TEXTURE16)
+        static let TEXTURE17: GLenum = GLenum(GL_TEXTURE17)
+        static let TEXTURE18: GLenum = GLenum(GL_TEXTURE18)
+        static let TEXTURE19: GLenum = GLenum(GL_TEXTURE19)
+        static let TEXTURE20: GLenum = GLenum(GL_TEXTURE20)
+        static let TEXTURE21: GLenum = GLenum(GL_TEXTURE21)
+        static let TEXTURE22: GLenum = GLenum(GL_TEXTURE22)
+        static let TEXTURE23: GLenum = GLenum(GL_TEXTURE23)
+        static let TEXTURE24: GLenum = GLenum(GL_TEXTURE24)
+        static let TEXTURE25: GLenum = GLenum(GL_TEXTURE25)
+        static let TEXTURE26: GLenum = GLenum(GL_TEXTURE26)
+        static let TEXTURE27: GLenum = GLenum(GL_TEXTURE27)
+        static let TEXTURE28: GLenum = GLenum(GL_TEXTURE28)
+        static let TEXTURE29: GLenum = GLenum(GL_TEXTURE29)
+        static let TEXTURE30: GLenum = GLenum(GL_TEXTURE30)
+        static let TEXTURE31: GLenum = GLenum(GL_TEXTURE31)
+        static let ACTIVE_TEXTURE: GLenum = GLenum(GL_ACTIVE_TEXTURE)
+
+        /* TextureWrapMode */
+        static let REPEAT: GLenum = GLenum(GL_REPEAT)
+        static let CLAMP_TO_EDGE: GLenum = GLenum(GL_CLAMP_TO_EDGE)
+        static let MIRRORED_REPEAT: GLenum = GLenum(GL_MIRRORED_REPEAT)
+
+        /* Uniform Types */
+        static let FLOAT_VEC2: GLenum = GLenum(GL_FLOAT_VEC2)
+        static let FLOAT_VEC3: GLenum = GLenum(GL_FLOAT_VEC3)
+        static let FLOAT_VEC4: GLenum = GLenum(GL_FLOAT_VEC4)
+        static let INT_VEC2: GLenum = GLenum(GL_INT_VEC2)
+        static let INT_VEC3: GLenum = GLenum(GL_INT_VEC3)
+        static let INT_VEC4: GLenum = GLenum(GL_INT_VEC4)
+        static let BOOL: GLenum = GLenum(GL_BOOL)
+        static let BOOL_VEC2: GLenum = GLenum(GL_BOOL_VEC2)
+        static let BOOL_VEC3: GLenum = GLenum(GL_BOOL_VEC3)
+        static let BOOL_VEC4: GLenum = GLenum(GL_BOOL_VEC4)
+        static let FLOAT_MAT2: GLenum = GLenum(GL_FLOAT_MAT2)
+        static let FLOAT_MAT3: GLenum = GLenum(GL_FLOAT_MAT3)
+        static let FLOAT_MAT4: GLenum = GLenum(GL_FLOAT_MAT4)
+        static let SAMPLER_2D: GLenum = GLenum(GL_SAMPLER_2D)
+        static let SAMPLER_CUBE: GLenum = GLenum(GL_SAMPLER_CUBE)
+
+        /* Vertex Arrays */
+        static let VERTEX_ATTRIB_ARRAY_ENABLED: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_ENABLED)
+        static let VERTEX_ATTRIB_ARRAY_SIZE: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_SIZE)
+        static let VERTEX_ATTRIB_ARRAY_STRIDE: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_STRIDE)
+        static let VERTEX_ATTRIB_ARRAY_TYPE: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_TYPE)
+        static let VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_NORMALIZED)
+        static let VERTEX_ATTRIB_ARRAY_POINTER: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_POINTER)
+        static let VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)
+
+        /* Read Format */
+        static let IMPLEMENTATION_COLOR_READ_TYPE: GLenum = GLenum(GL_IMPLEMENTATION_COLOR_READ_TYPE)
+        static let IMPLEMENTATION_COLOR_READ_FORMAT: GLenum = GLenum(GL_IMPLEMENTATION_COLOR_READ_FORMAT)
+
+        /* Shader Source */
+        static let COMPILE_STATUS: GLenum = GLenum(GL_COMPILE_STATUS)
+        static let INFO_LOG_LENGTH: GLenum = GLenum(GL_INFO_LOG_LENGTH)
+        static let SHADER_SOURCE_LENGTH: GLenum = GLenum(GL_SHADER_SOURCE_LENGTH)
+        static let SHADER_COMPILER: GLenum = GLenum(GL_SHADER_COMPILER)
+
+        /* Shader Binary */
+        static let SHADER_BINARY_FORMATS: GLenum = GLenum(GL_SHADER_BINARY_FORMATS)
+        static let NUM_SHADER_BINARY_FORMATS: GLenum = GLenum(GL_NUM_SHADER_BINARY_FORMATS)
+
+        /* Shader Precision-Specified Types */
+        static let LOW_FLOAT: GLenum = GLenum(GL_LOW_FLOAT)
+        static let MEDIUM_FLOAT: GLenum = GLenum(GL_MEDIUM_FLOAT)
+        static let HIGH_FLOAT: GLenum = GLenum(GL_HIGH_FLOAT)
+        static let LOW_INT: GLenum = GLenum(GL_LOW_INT)
+        static let MEDIUM_INT: GLenum = GLenum(GL_MEDIUM_INT)
+        static let HIGH_INT: GLenum = GLenum(GL_HIGH_INT)
+
+        /* Framebuffer Object. */
+        static let FRAMEBUFFER: GLenum = GLenum(GL_FRAMEBUFFER)
+        static let RENDERBUFFER: GLenum = GLenum(GL_RENDERBUFFER)
+
+        static let RGBA4: GLenum = GLenum(GL_RGBA4)
+        static let RGB5_A1: GLenum = GLenum(GL_RGB5_A1)
+        static let RGB565: GLenum = GLenum(GL_RGB565)
+        static let DEPTH_COMPONENT16: GLenum = GLenum(GL_DEPTH_COMPONENT16)
+        static let STENCIL_INDEX8: GLenum = GLenum(GL_STENCIL_INDEX8)
+
+        static let RENDERBUFFER_WIDTH: GLenum = GLenum(GL_RENDERBUFFER_WIDTH)
+        static let RENDERBUFFER_HEIGHT: GLenum = GLenum(GL_RENDERBUFFER_HEIGHT)
+        static let RENDERBUFFER_INTERNAL_FORMAT: GLenum = GLenum(GL_RENDERBUFFER_INTERNAL_FORMAT)
+        static let RENDERBUFFER_RED_SIZE: GLenum = GLenum(GL_RENDERBUFFER_RED_SIZE)
+        static let RENDERBUFFER_GREEN_SIZE: GLenum = GLenum(GL_RENDERBUFFER_GREEN_SIZE)
+        static let RENDERBUFFER_BLUE_SIZE: GLenum = GLenum(GL_RENDERBUFFER_BLUE_SIZE)
+        static let RENDERBUFFER_ALPHA_SIZE: GLenum = GLenum(GL_RENDERBUFFER_ALPHA_SIZE)
+        static let RENDERBUFFER_DEPTH_SIZE: GLenum = GLenum(GL_RENDERBUFFER_DEPTH_SIZE)
+        static let RENDERBUFFER_STENCIL_SIZE: GLenum = GLenum(GL_RENDERBUFFER_STENCIL_SIZE)
+
+        static let FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE)
+        static let FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME)
+        static let FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL)
+        static let FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE)
+
+        static let COLOR_ATTACHMENT0: GLenum = GLenum(GL_COLOR_ATTACHMENT0)
+        static let DEPTH_ATTACHMENT: GLenum = GLenum(GL_DEPTH_ATTACHMENT)
+        static let STENCIL_ATTACHMENT: GLenum = GLenum(GL_STENCIL_ATTACHMENT)
+
+        static let NONE: GLenum = GLenum(GL_NONE)
+
+        static let FRAMEBUFFER_COMPLETE: GLenum = GLenum(GL_FRAMEBUFFER_COMPLETE)
+        static let FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum = GLenum(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+        static let FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum = GLenum(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+        static let FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum = GLenum(GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS)
+        static let FRAMEBUFFER_UNSUPPORTED: GLenum = GLenum(GL_FRAMEBUFFER_UNSUPPORTED)
+
+        static let FRAMEBUFFER_BINDING: GLenum = GLenum(GL_FRAMEBUFFER_BINDING)
+        static let RENDERBUFFER_BINDING: GLenum = GLenum(GL_RENDERBUFFER_BINDING)
+        static let MAX_RENDERBUFFER_SIZE: GLenum = GLenum(GL_MAX_RENDERBUFFER_SIZE)
+
+        static let INVALID_FRAMEBUFFER_OPERATION: GLenum = GLenum(GL_INVALID_FRAMEBUFFER_OPERATION)
+
+        /* OpenGL ES 3.0 */
+
+        static let READ_BUFFER: GLenum = GLenum(GL_READ_BUFFER)
+        static let UNPACK_ROW_LENGTH: GLenum = GLenum(GL_UNPACK_ROW_LENGTH)
+        static let UNPACK_SKIP_ROWS: GLenum = GLenum(GL_UNPACK_SKIP_ROWS)
+        static let UNPACK_SKIP_PIXELS: GLenum = GLenum(GL_UNPACK_SKIP_PIXELS)
+        static let PACK_ROW_LENGTH: GLenum = GLenum(GL_PACK_ROW_LENGTH)
+        static let PACK_SKIP_ROWS: GLenum = GLenum(GL_PACK_SKIP_ROWS)
+        static let PACK_SKIP_PIXELS: GLenum = GLenum(GL_PACK_SKIP_PIXELS)
+        static let COLOR: GLenum = GLenum(GL_COLOR)
+        static let DEPTH: GLenum = GLenum(GL_DEPTH)
+        static let STENCIL: GLenum = GLenum(GL_STENCIL)
+        static let RED: GLenum = GLenum(GL_RED)
+        static let RGB8: GLenum = GLenum(GL_RGB8)
+        static let RGBA8: GLenum = GLenum(GL_RGBA8)
+        static let RGB10_A2: GLenum = GLenum(GL_RGB10_A2)
+        static let TEXTURE_BINDING_3D: GLenum = GLenum(GL_TEXTURE_BINDING_3D)
+        static let UNPACK_SKIP_IMAGES: GLenum = GLenum(GL_UNPACK_SKIP_IMAGES)
+        static let UNPACK_IMAGE_HEIGHT: GLenum = GLenum(GL_UNPACK_IMAGE_HEIGHT)
+        static let TEXTURE_3D: GLenum = GLenum(GL_TEXTURE_3D)
+        static let TEXTURE_WRAP_R: GLenum = GLenum(GL_TEXTURE_WRAP_R)
+        static let MAX_3D_TEXTURE_SIZE: GLenum = GLenum(GL_MAX_3D_TEXTURE_SIZE)
+        static let UNSIGNED_INT_2_10_10_10_REV: GLenum = GLenum(GL_UNSIGNED_INT_2_10_10_10_REV)
+        static let MAX_ELEMENTS_VERTICES: GLenum = GLenum(GL_MAX_ELEMENTS_VERTICES)
+        static let MAX_ELEMENTS_INDICES: GLenum = GLenum(GL_MAX_ELEMENTS_INDICES)
+        static let TEXTURE_MIN_LOD: GLenum = GLenum(GL_TEXTURE_MIN_LOD)
+        static let TEXTURE_MAX_LOD: GLenum = GLenum(GL_TEXTURE_MAX_LOD)
+        static let TEXTURE_BASE_LEVEL: GLenum = GLenum(GL_TEXTURE_BASE_LEVEL)
+        static let TEXTURE_MAX_LEVEL: GLenum = GLenum(GL_TEXTURE_MAX_LEVEL)
+        static let MIN: GLenum = GLenum(GL_MIN)
+        static let MAX: GLenum = GLenum(GL_MAX)
+        static let DEPTH_COMPONENT24: GLenum = GLenum(GL_DEPTH_COMPONENT24)
+        static let MAX_TEXTURE_LOD_BIAS: GLenum = GLenum(GL_MAX_TEXTURE_LOD_BIAS)
+        static let TEXTURE_COMPARE_MODE: GLenum = GLenum(GL_TEXTURE_COMPARE_MODE)
+        static let TEXTURE_COMPARE_FUNC: GLenum = GLenum(GL_TEXTURE_COMPARE_FUNC)
+        static let CURRENT_QUERY: GLenum = GLenum(GL_CURRENT_QUERY)
+        static let QUERY_RESULT: GLenum = GLenum(GL_QUERY_RESULT)
+        static let QUERY_RESULT_AVAILABLE: GLenum = GLenum(GL_QUERY_RESULT_AVAILABLE)
+        static let BUFFER_MAPPED: GLenum = GLenum(GL_BUFFER_MAPPED)
+        static let BUFFER_MAP_POINTER: GLenum = GLenum(GL_BUFFER_MAP_POINTER)
+        static let STREAM_READ: GLenum = GLenum(GL_STREAM_READ)
+        static let STREAM_COPY: GLenum = GLenum(GL_STREAM_COPY)
+        static let STATIC_READ: GLenum = GLenum(GL_STATIC_READ)
+        static let STATIC_COPY: GLenum = GLenum(GL_STATIC_COPY)
+        static let DYNAMIC_READ: GLenum = GLenum(GL_DYNAMIC_READ)
+        static let DYNAMIC_COPY: GLenum = GLenum(GL_DYNAMIC_COPY)
+        static let MAX_DRAW_BUFFERS: GLenum = GLenum(GL_MAX_DRAW_BUFFERS)
+        static let DRAW_BUFFER0: GLenum = GLenum(GL_DRAW_BUFFER0)
+        static let DRAW_BUFFER1: GLenum = GLenum(GL_DRAW_BUFFER1)
+        static let DRAW_BUFFER2: GLenum = GLenum(GL_DRAW_BUFFER2)
+        static let DRAW_BUFFER3: GLenum = GLenum(GL_DRAW_BUFFER3)
+        static let DRAW_BUFFER4: GLenum = GLenum(GL_DRAW_BUFFER4)
+        static let DRAW_BUFFER5: GLenum = GLenum(GL_DRAW_BUFFER5)
+        static let DRAW_BUFFER6: GLenum = GLenum(GL_DRAW_BUFFER6)
+        static let DRAW_BUFFER7: GLenum = GLenum(GL_DRAW_BUFFER7)
+        static let DRAW_BUFFER8: GLenum = GLenum(GL_DRAW_BUFFER8)
+        static let DRAW_BUFFER9: GLenum = GLenum(GL_DRAW_BUFFER9)
+        static let DRAW_BUFFER10: GLenum = GLenum(GL_DRAW_BUFFER10)
+        static let DRAW_BUFFER11: GLenum = GLenum(GL_DRAW_BUFFER11)
+        static let DRAW_BUFFER12: GLenum = GLenum(GL_DRAW_BUFFER12)
+        static let DRAW_BUFFER13: GLenum = GLenum(GL_DRAW_BUFFER13)
+        static let DRAW_BUFFER14: GLenum = GLenum(GL_DRAW_BUFFER14)
+        static let DRAW_BUFFER15: GLenum = GLenum(GL_DRAW_BUFFER15)
+        static let MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum = GLenum(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS)
+        static let MAX_VERTEX_UNIFORM_COMPONENTS: GLenum = GLenum(GL_MAX_VERTEX_UNIFORM_COMPONENTS)
+        static let SAMPLER_3D: GLenum = GLenum(GL_SAMPLER_3D)
+        static let SAMPLER_2D_SHADOW: GLenum = GLenum(GL_SAMPLER_2D_SHADOW)
+        static let FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum = GLenum(GL_FRAGMENT_SHADER_DERIVATIVE_HINT)
+        static let PIXEL_PACK_BUFFER: GLenum = GLenum(GL_PIXEL_PACK_BUFFER)
+        static let PIXEL_UNPACK_BUFFER: GLenum = GLenum(GL_PIXEL_UNPACK_BUFFER)
+        static let PIXEL_PACK_BUFFER_BINDING: GLenum = GLenum(GL_PIXEL_PACK_BUFFER_BINDING)
+        static let PIXEL_UNPACK_BUFFER_BINDING: GLenum = GLenum(GL_PIXEL_UNPACK_BUFFER_BINDING)
+        static let FLOAT_MAT2x3: GLenum = GLenum(GL_FLOAT_MAT2x3)
+        static let FLOAT_MAT2x4: GLenum = GLenum(GL_FLOAT_MAT2x4)
+        static let FLOAT_MAT3x2: GLenum = GLenum(GL_FLOAT_MAT3x2)
+        static let FLOAT_MAT3x4: GLenum = GLenum(GL_FLOAT_MAT3x4)
+        static let FLOAT_MAT4x2: GLenum = GLenum(GL_FLOAT_MAT4x2)
+        static let FLOAT_MAT4x3: GLenum = GLenum(GL_FLOAT_MAT4x3)
+        static let SRGB: GLenum = GLenum(GL_SRGB)
+        static let SRGB8: GLenum = GLenum(GL_SRGB8)
+        static let SRGB8_ALPHA8: GLenum = GLenum(GL_SRGB8_ALPHA8)
+        static let COMPARE_REF_TO_TEXTURE: GLenum = GLenum(GL_COMPARE_REF_TO_TEXTURE)
+        static let MAJOR_VERSION: GLenum = GLenum(GL_MAJOR_VERSION)
+        static let MINOR_VERSION: GLenum = GLenum(GL_MINOR_VERSION)
+        static let NUM_EXTENSIONS: GLenum = GLenum(GL_NUM_EXTENSIONS)
+        static let RGBA32F: GLenum = GLenum(GL_RGBA32F)
+        static let RGB32F: GLenum = GLenum(GL_RGB32F)
+        static let RGBA16F: GLenum = GLenum(GL_RGBA16F)
+        static let RGB16F: GLenum = GLenum(GL_RGB16F)
+        static let VERTEX_ATTRIB_ARRAY_INTEGER: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_INTEGER)
+        static let MAX_ARRAY_TEXTURE_LAYERS: GLenum = GLenum(GL_MAX_ARRAY_TEXTURE_LAYERS)
+        static let MIN_PROGRAM_TEXEL_OFFSET: GLenum = GLenum(GL_MIN_PROGRAM_TEXEL_OFFSET)
+        static let MAX_PROGRAM_TEXEL_OFFSET: GLenum = GLenum(GL_MAX_PROGRAM_TEXEL_OFFSET)
+        static let MAX_VARYING_COMPONENTS: GLenum = GLenum(GL_MAX_VARYING_COMPONENTS)
+        static let TEXTURE_2D_ARRAY: GLenum = GLenum(GL_TEXTURE_2D_ARRAY)
+        static let TEXTURE_BINDING_2D_ARRAY: GLenum = GLenum(GL_TEXTURE_BINDING_2D_ARRAY)
+        static let R11F_G11F_B10F: GLenum = GLenum(GL_R11F_G11F_B10F)
+        static let UNSIGNED_INT_10F_11F_11F_REV: GLenum = GLenum(GL_UNSIGNED_INT_10F_11F_11F_REV)
+        static let RGB9_E5: GLenum = GLenum(GL_RGB9_E5)
+        static let UNSIGNED_INT_5_9_9_9_REV: GLenum = GLenum(GL_UNSIGNED_INT_5_9_9_9_REV)
+        static let TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH)
+        static let TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BUFFER_MODE)
+        static let MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum = GLenum(GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS)
+        static let TRANSFORM_FEEDBACK_VARYINGS: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_VARYINGS)
+        static let TRANSFORM_FEEDBACK_BUFFER_START: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BUFFER_START)
+        static let TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BUFFER_SIZE)
+        static let TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN)
+        static let RASTERIZER_DISCARD: GLenum = GLenum(GL_RASTERIZER_DISCARD)
+        static let MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum = GLenum(GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS)
+        static let MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum = GLenum(GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS)
+        static let INTERLEAVED_ATTRIBS: GLenum = GLenum(GL_INTERLEAVED_ATTRIBS)
+        static let SEPARATE_ATTRIBS: GLenum = GLenum(GL_SEPARATE_ATTRIBS)
+        static let TRANSFORM_FEEDBACK_BUFFER: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BUFFER)
+        static let TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BUFFER_BINDING)
+        static let RGBA32UI: GLenum = GLenum(GL_RGBA32UI)
+        static let RGB32UI: GLenum = GLenum(GL_RGB32UI)
+        static let RGBA16UI: GLenum = GLenum(GL_RGBA16UI)
+        static let RGB16UI: GLenum = GLenum(GL_RGB16UI)
+        static let RGBA8UI: GLenum = GLenum(GL_RGBA8UI)
+        static let RGB8UI: GLenum = GLenum(GL_RGB8UI)
+        static let RGBA32I: GLenum = GLenum(GL_RGBA32I)
+        static let RGB32I: GLenum = GLenum(GL_RGB32I)
+        static let RGBA16I: GLenum = GLenum(GL_RGBA16I)
+        static let RGB16I: GLenum = GLenum(GL_RGB16I)
+        static let RGBA8I: GLenum = GLenum(GL_RGBA8I)
+        static let RGB8I: GLenum = GLenum(GL_RGB8I)
+        static let RED_INTEGER: GLenum = GLenum(GL_RED_INTEGER)
+        static let RGB_INTEGER: GLenum = GLenum(GL_RGB_INTEGER)
+        static let RGBA_INTEGER: GLenum = GLenum(GL_RGBA_INTEGER)
+        static let SAMPLER_2D_ARRAY: GLenum = GLenum(GL_SAMPLER_2D_ARRAY)
+        static let SAMPLER_2D_ARRAY_SHADOW: GLenum = GLenum(GL_SAMPLER_2D_ARRAY_SHADOW)
+        static let SAMPLER_CUBE_SHADOW: GLenum = GLenum(GL_SAMPLER_CUBE_SHADOW)
+        static let UNSIGNED_INT_VEC2: GLenum = GLenum(GL_UNSIGNED_INT_VEC2)
+        static let UNSIGNED_INT_VEC3: GLenum = GLenum(GL_UNSIGNED_INT_VEC3)
+        static let UNSIGNED_INT_VEC4: GLenum = GLenum(GL_UNSIGNED_INT_VEC4)
+        static let INT_SAMPLER_2D: GLenum = GLenum(GL_INT_SAMPLER_2D)
+        static let INT_SAMPLER_3D: GLenum = GLenum(GL_INT_SAMPLER_3D)
+        static let INT_SAMPLER_CUBE: GLenum = GLenum(GL_INT_SAMPLER_CUBE)
+        static let INT_SAMPLER_2D_ARRAY: GLenum = GLenum(GL_INT_SAMPLER_2D_ARRAY)
+        static let UNSIGNED_INT_SAMPLER_2D: GLenum = GLenum(GL_UNSIGNED_INT_SAMPLER_2D)
+        static let UNSIGNED_INT_SAMPLER_3D: GLenum = GLenum(GL_UNSIGNED_INT_SAMPLER_3D)
+        static let UNSIGNED_INT_SAMPLER_CUBE: GLenum = GLenum(GL_UNSIGNED_INT_SAMPLER_CUBE)
+        static let UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum = GLenum(GL_UNSIGNED_INT_SAMPLER_2D_ARRAY)
+        static let BUFFER_ACCESS_FLAGS: GLenum = GLenum(GL_BUFFER_ACCESS_FLAGS)
+        static let BUFFER_MAP_LENGTH: GLenum = GLenum(GL_BUFFER_MAP_LENGTH)
+        static let BUFFER_MAP_OFFSET: GLenum = GLenum(GL_BUFFER_MAP_OFFSET)
+        static let DEPTH_COMPONENT32F: GLenum = GLenum(GL_DEPTH_COMPONENT32F)
+        static let DEPTH32F_STENCIL8: GLenum = GLenum(GL_DEPTH32F_STENCIL8)
+        static let FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum = GLenum(GL_FLOAT_32_UNSIGNED_INT_24_8_REV)
+        static let FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING)
+        static let FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE)
+        static let FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE)
+        static let FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE)
+        static let FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE)
+        static let FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE)
+        static let FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE)
+        static let FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE)
+        static let FRAMEBUFFER_DEFAULT: GLenum = GLenum(GL_FRAMEBUFFER_DEFAULT)
+        static let FRAMEBUFFER_UNDEFINED: GLenum = GLenum(GL_FRAMEBUFFER_UNDEFINED)
+        static let DEPTH_STENCIL_ATTACHMENT: GLenum = GLenum(GL_DEPTH_STENCIL_ATTACHMENT)
+        static let DEPTH_STENCIL: GLenum = GLenum(GL_DEPTH_STENCIL)
+        static let UNSIGNED_INT_24_8: GLenum = GLenum(GL_UNSIGNED_INT_24_8)
+        static let DEPTH24_STENCIL8: GLenum = GLenum(GL_DEPTH24_STENCIL8)
+        static let UNSIGNED_NORMALIZED: GLenum = GLenum(GL_UNSIGNED_NORMALIZED)
+        static let DRAW_FRAMEBUFFER_BINDING: GLenum = GLenum(GL_DRAW_FRAMEBUFFER_BINDING)
+        static let READ_FRAMEBUFFER: GLenum = GLenum(GL_READ_FRAMEBUFFER)
+        static let DRAW_FRAMEBUFFER: GLenum = GLenum(GL_DRAW_FRAMEBUFFER)
+        static let READ_FRAMEBUFFER_BINDING: GLenum = GLenum(GL_READ_FRAMEBUFFER_BINDING)
+        static let RENDERBUFFER_SAMPLES: GLenum = GLenum(GL_RENDERBUFFER_SAMPLES)
+        static let FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum = GLenum(GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER)
+        static let MAX_COLOR_ATTACHMENTS: GLenum = GLenum(GL_MAX_COLOR_ATTACHMENTS)
+        static let COLOR_ATTACHMENT1: GLenum = GLenum(GL_COLOR_ATTACHMENT1)
+        static let COLOR_ATTACHMENT2: GLenum = GLenum(GL_COLOR_ATTACHMENT2)
+        static let COLOR_ATTACHMENT3: GLenum = GLenum(GL_COLOR_ATTACHMENT3)
+        static let COLOR_ATTACHMENT4: GLenum = GLenum(GL_COLOR_ATTACHMENT4)
+        static let COLOR_ATTACHMENT5: GLenum = GLenum(GL_COLOR_ATTACHMENT5)
+        static let COLOR_ATTACHMENT6: GLenum = GLenum(GL_COLOR_ATTACHMENT6)
+        static let COLOR_ATTACHMENT7: GLenum = GLenum(GL_COLOR_ATTACHMENT7)
+        static let COLOR_ATTACHMENT8: GLenum = GLenum(GL_COLOR_ATTACHMENT8)
+        static let COLOR_ATTACHMENT9: GLenum = GLenum(GL_COLOR_ATTACHMENT9)
+        static let COLOR_ATTACHMENT10: GLenum = GLenum(GL_COLOR_ATTACHMENT10)
+        static let COLOR_ATTACHMENT11: GLenum = GLenum(GL_COLOR_ATTACHMENT11)
+        static let COLOR_ATTACHMENT12: GLenum = GLenum(GL_COLOR_ATTACHMENT12)
+        static let COLOR_ATTACHMENT13: GLenum = GLenum(GL_COLOR_ATTACHMENT13)
+        static let COLOR_ATTACHMENT14: GLenum = GLenum(GL_COLOR_ATTACHMENT14)
+        static let COLOR_ATTACHMENT15: GLenum = GLenum(GL_COLOR_ATTACHMENT15)
+        static let FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum = GLenum(GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE)
+        static let MAX_SAMPLES: GLenum = GLenum(GL_MAX_SAMPLES)
+        static let HALF_FLOAT: GLenum = GLenum(GL_HALF_FLOAT)
+        static let MAP_READ_BIT: GLenum = GLenum(GL_MAP_READ_BIT)
+        static let MAP_WRITE_BIT: GLenum = GLenum(GL_MAP_WRITE_BIT)
+        static let MAP_INVALIDATE_RANGE_BIT: GLenum = GLenum(GL_MAP_INVALIDATE_RANGE_BIT)
+        static let MAP_INVALIDATE_BUFFER_BIT: GLenum = GLenum(GL_MAP_INVALIDATE_BUFFER_BIT)
+        static let MAP_FLUSH_EXPLICIT_BIT: GLenum = GLenum(GL_MAP_FLUSH_EXPLICIT_BIT)
+        static let MAP_UNSYNCHRONIZED_BIT: GLenum = GLenum(GL_MAP_UNSYNCHRONIZED_BIT)
+        static let RG: GLenum = GLenum(GL_RG)
+        static let RG_INTEGER: GLenum = GLenum(GL_RG_INTEGER)
+        static let R8: GLenum = GLenum(GL_R8)
+        static let RG8: GLenum = GLenum(GL_RG8)
+        static let R16F: GLenum = GLenum(GL_R16F)
+        static let R32F: GLenum = GLenum(GL_R32F)
+        static let RG16F: GLenum = GLenum(GL_RG16F)
+        static let RG32F: GLenum = GLenum(GL_RG32F)
+        static let R8I: GLenum = GLenum(GL_R8I)
+        static let R8UI: GLenum = GLenum(GL_R8UI)
+        static let R16I: GLenum = GLenum(GL_R16I)
+        static let R16UI: GLenum = GLenum(GL_R16UI)
+        static let R32I: GLenum = GLenum(GL_R32I)
+        static let R32UI: GLenum = GLenum(GL_R32UI)
+        static let RG8I: GLenum = GLenum(GL_RG8I)
+        static let RG8UI: GLenum = GLenum(GL_RG8UI)
+        static let RG16I: GLenum = GLenum(GL_RG16I)
+        static let RG16UI: GLenum = GLenum(GL_RG16UI)
+        static let RG32I: GLenum = GLenum(GL_RG32I)
+        static let RG32UI: GLenum = GLenum(GL_RG32UI)
+        static let VERTEX_ARRAY_BINDING: GLenum = GLenum(GL_VERTEX_ARRAY_BINDING)
+        static let R8_SNORM: GLenum = GLenum(GL_R8_SNORM)
+        static let RG8_SNORM: GLenum = GLenum(GL_RG8_SNORM)
+        static let RGB8_SNORM: GLenum = GLenum(GL_RGB8_SNORM)
+        static let RGBA8_SNORM: GLenum = GLenum(GL_RGBA8_SNORM)
+        static let SIGNED_NORMALIZED: GLenum = GLenum(GL_SIGNED_NORMALIZED)
+        static let PRIMITIVE_RESTART_FIXED_INDEX: GLenum = GLenum(GL_PRIMITIVE_RESTART_FIXED_INDEX)
+        static let COPY_READ_BUFFER: GLenum = GLenum(GL_COPY_READ_BUFFER)
+        static let COPY_WRITE_BUFFER: GLenum = GLenum(GL_COPY_WRITE_BUFFER)
+        static let COPY_READ_BUFFER_BINDING: GLenum = GLenum(GL_COPY_READ_BUFFER_BINDING)
+        static let COPY_WRITE_BUFFER_BINDING: GLenum = GLenum(GL_COPY_WRITE_BUFFER_BINDING)
+        static let UNIFORM_BUFFER: GLenum = GLenum(GL_UNIFORM_BUFFER)
+        static let UNIFORM_BUFFER_BINDING: GLenum = GLenum(GL_UNIFORM_BUFFER_BINDING)
+        static let UNIFORM_BUFFER_START: GLenum = GLenum(GL_UNIFORM_BUFFER_START)
+        static let UNIFORM_BUFFER_SIZE: GLenum = GLenum(GL_UNIFORM_BUFFER_SIZE)
+        static let MAX_VERTEX_UNIFORM_BLOCKS: GLenum = GLenum(GL_MAX_VERTEX_UNIFORM_BLOCKS)
+        static let MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum = GLenum(GL_MAX_FRAGMENT_UNIFORM_BLOCKS)
+        static let MAX_COMBINED_UNIFORM_BLOCKS: GLenum = GLenum(GL_MAX_COMBINED_UNIFORM_BLOCKS)
+        static let MAX_UNIFORM_BUFFER_BINDINGS: GLenum = GLenum(GL_MAX_UNIFORM_BUFFER_BINDINGS)
+        static let MAX_UNIFORM_BLOCK_SIZE: GLenum = GLenum(GL_MAX_UNIFORM_BLOCK_SIZE)
+        static let MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum = GLenum(GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS)
+        static let MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum = GLenum(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS)
+        static let UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum = GLenum(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT)
+        static let ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH: GLenum = GLenum(GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH)
+        static let ACTIVE_UNIFORM_BLOCKS: GLenum = GLenum(GL_ACTIVE_UNIFORM_BLOCKS)
+        static let UNIFORM_TYPE: GLenum = GLenum(GL_UNIFORM_TYPE)
+        static let UNIFORM_SIZE: GLenum = GLenum(GL_UNIFORM_SIZE)
+        static let UNIFORM_NAME_LENGTH: GLenum = GLenum(GL_UNIFORM_NAME_LENGTH)
+        static let UNIFORM_BLOCK_INDEX: GLenum = GLenum(GL_UNIFORM_BLOCK_INDEX)
+        static let UNIFORM_OFFSET: GLenum = GLenum(GL_UNIFORM_OFFSET)
+        static let UNIFORM_ARRAY_STRIDE: GLenum = GLenum(GL_UNIFORM_ARRAY_STRIDE)
+        static let UNIFORM_MATRIX_STRIDE: GLenum = GLenum(GL_UNIFORM_MATRIX_STRIDE)
+        static let UNIFORM_IS_ROW_MAJOR: GLenum = GLenum(GL_UNIFORM_IS_ROW_MAJOR)
+        static let UNIFORM_BLOCK_BINDING: GLenum = GLenum(GL_UNIFORM_BLOCK_BINDING)
+        static let UNIFORM_BLOCK_DATA_SIZE: GLenum = GLenum(GL_UNIFORM_BLOCK_DATA_SIZE)
+        static let UNIFORM_BLOCK_NAME_LENGTH: GLenum = GLenum(GL_UNIFORM_BLOCK_NAME_LENGTH)
+        static let UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum = GLenum(GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS)
+        static let UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum = GLenum(GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES)
+        static let UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum = GLenum(GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER)
+        static let UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum = GLenum(GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER)
+        static let INVALID_INDEX: GLenum = GLenum(GL_INVALID_INDEX)
+        static let MAX_VERTEX_OUTPUT_COMPONENTS: GLenum = GLenum(GL_MAX_VERTEX_OUTPUT_COMPONENTS)
+        static let MAX_FRAGMENT_INPUT_COMPONENTS: GLenum = GLenum(GL_MAX_FRAGMENT_INPUT_COMPONENTS)
+        static let MAX_SERVER_WAIT_TIMEOUT: GLenum = GLenum(GL_MAX_SERVER_WAIT_TIMEOUT)
+        static let OBJECT_TYPE: GLenum = GLenum(GL_OBJECT_TYPE)
+        static let SYNC_CONDITION: GLenum = GLenum(GL_SYNC_CONDITION)
+        static let SYNC_STATUS: GLenum = GLenum(GL_SYNC_STATUS)
+        static let SYNC_FLAGS: GLenum = GLenum(GL_SYNC_FLAGS)
+        static let SYNC_FENCE: GLenum = GLenum(GL_SYNC_FENCE)
+        static let SYNC_GPU_COMMANDS_COMPLETE: GLenum = GLenum(GL_SYNC_GPU_COMMANDS_COMPLETE)
+        static let UNSIGNALED: GLenum = GLenum(GL_UNSIGNALED)
+        static let SIGNALED: GLenum = GLenum(GL_SIGNALED)
+        static let ALREADY_SIGNALED: GLenum = GLenum(GL_ALREADY_SIGNALED)
+        static let TIMEOUT_EXPIRED: GLenum = GLenum(GL_TIMEOUT_EXPIRED)
+        static let CONDITION_SATISFIED: GLenum = GLenum(GL_CONDITION_SATISFIED)
+        static let WAIT_FAILED: GLenum = GLenum(GL_WAIT_FAILED)
+        static let SYNC_FLUSH_COMMANDS_BIT: GLenum = GLenum(GL_SYNC_FLUSH_COMMANDS_BIT)
+        static let TIMEOUT_IGNORED: GLuint64 = GLuint64(GL_TIMEOUT_IGNORED)
+        static let VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum = GLenum(GL_VERTEX_ATTRIB_ARRAY_DIVISOR)
+        static let ANY_SAMPLES_PASSED: GLenum = GLenum(GL_ANY_SAMPLES_PASSED)
+        static let ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum = GLenum(GL_ANY_SAMPLES_PASSED_CONSERVATIVE)
+        static let SAMPLER_BINDING: GLenum = GLenum(GL_SAMPLER_BINDING)
+        static let RGB10_A2UI: GLenum = GLenum(GL_RGB10_A2UI)
+        static let TEXTURE_SWIZZLE_R: GLenum = GLenum(GL_TEXTURE_SWIZZLE_R)
+        static let TEXTURE_SWIZZLE_G: GLenum = GLenum(GL_TEXTURE_SWIZZLE_G)
+        static let TEXTURE_SWIZZLE_B: GLenum = GLenum(GL_TEXTURE_SWIZZLE_B)
+        static let TEXTURE_SWIZZLE_A: GLenum = GLenum(GL_TEXTURE_SWIZZLE_A)
+        static let GREEN: GLenum = GLenum(GL_GREEN)
+        static let BLUE: GLenum = GLenum(GL_BLUE)
+        static let INT_2_10_10_10_REV: GLenum = GLenum(GL_INT_2_10_10_10_REV)
+        static let TRANSFORM_FEEDBACK: GLenum = GLenum(GL_TRANSFORM_FEEDBACK)
+        static let TRANSFORM_FEEDBACK_PAUSED: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_PAUSED)
+        static let TRANSFORM_FEEDBACK_ACTIVE: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_ACTIVE)
+        static let TRANSFORM_FEEDBACK_BINDING: GLenum = GLenum(GL_TRANSFORM_FEEDBACK_BINDING)
+        static let PROGRAM_BINARY_RETRIEVABLE_HINT: GLenum = GLenum(GL_PROGRAM_BINARY_RETRIEVABLE_HINT)
+        static let PROGRAM_BINARY_LENGTH: GLenum = GLenum(GL_PROGRAM_BINARY_LENGTH)
+        static let NUM_PROGRAM_BINARY_FORMATS: GLenum = GLenum(GL_NUM_PROGRAM_BINARY_FORMATS)
+        static let PROGRAM_BINARY_FORMATS: GLenum = GLenum(GL_PROGRAM_BINARY_FORMATS)
+        static let COMPRESSED_R11_EAC: GLenum = GLenum(GL_COMPRESSED_R11_EAC)
+        static let COMPRESSED_SIGNED_R11_EAC: GLenum = GLenum(GL_COMPRESSED_SIGNED_R11_EAC)
+        static let COMPRESSED_RG11_EAC: GLenum = GLenum(GL_COMPRESSED_RG11_EAC)
+        static let COMPRESSED_SIGNED_RG11_EAC: GLenum = GLenum(GL_COMPRESSED_SIGNED_RG11_EAC)
+        static let COMPRESSED_RGB8_ETC2: GLenum = GLenum(GL_COMPRESSED_RGB8_ETC2)
+        static let COMPRESSED_SRGB8_ETC2: GLenum = GLenum(GL_COMPRESSED_SRGB8_ETC2)
+        static let COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum = GLenum(GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2)
+        static let COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: GLenum = GLenum(GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2)
+        static let COMPRESSED_RGBA8_ETC2_EAC: GLenum = GLenum(GL_COMPRESSED_RGBA8_ETC2_EAC)
+        static let COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: GLenum = GLenum(GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC)
+        static let TEXTURE_IMMUTABLE_FORMAT: GLenum = GLenum(GL_TEXTURE_IMMUTABLE_FORMAT)
+        static let MAX_ELEMENT_INDEX: GLenum = GLenum(GL_MAX_ELEMENT_INDEX)
+        static let NUM_SAMPLE_COUNTS: GLenum = GLenum(GL_NUM_SAMPLE_COUNTS)
+        static let TEXTURE_IMMUTABLE_LEVELS: GLenum = GLenum(GL_TEXTURE_IMMUTABLE_LEVELS)
+
+    }
+
+    class GLK {
+        class VertexAttrib {
+            static let Position: GLuint = GLuint(GLKVertexAttrib.Position.rawValue)
+            static let Normal: GLuint = GLuint(GLKVertexAttrib.Normal.rawValue)
+            static let Color: GLuint = GLuint(GLKVertexAttrib.Color.rawValue)
+            static let TexCoord0: GLuint = GLuint(GLKVertexAttrib.TexCoord0.rawValue)
+            static let TexCoord1: GLuint = GLuint(GLKVertexAttrib.TexCoord1.rawValue)
+        }
+    }
+}
+
+
